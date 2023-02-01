@@ -1,16 +1,9 @@
-{- get lines
-main = interact content
-  where
-    content input = show (length (lines input))
--}
+-- shell command: $ runghc 01.hs < 01.spec.txt
 
-{- get words
 main = interact content
   where
-    content input = show (length (words input))
--}
-
--- get chars
-main = interact content
-  where
-    content input = show (length input)
+    content input = do
+      let charSize = "chars: " ++ show (length input) ++ "\n"
+      let wordSize = "words: " ++ show (length (words input)) ++ "\n"
+      let lineSize = "lines: " ++ show (length (lines input)) ++ "\n"
+      charSize ++ wordSize ++ lineSize
