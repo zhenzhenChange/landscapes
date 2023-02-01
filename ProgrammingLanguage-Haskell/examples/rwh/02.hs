@@ -1,6 +1,8 @@
 -- (!!)  -> List index (subscript) operator.
-penultimate xs = xs !! max 0 (length xs - 2)
+penultimate :: [a] -> a
+penultimate list = list !! max 0 (length list - 2)
 
+penultimateMatch :: [a] -> a
 penultimateMatch [] = error "Empty"
 penultimateMatch [_] = error "Single"
 penultimateMatch [x, _] = x

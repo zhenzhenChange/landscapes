@@ -1,5 +1,6 @@
 -- shell command: $ runghc 01.hs < 01.spec.txt
 
+main :: IO ()
 main = interact content
   where
     content input = do
