@@ -1,4 +1,4 @@
-# Functional Programming Origins
+# Functional Programming: Origins
 
 最近脑子一热，想研习一下函数式编程。主要是天天有人抱着函数式喊 React ，不了解一下不然都没底气交（duǐ）流（rén），几番颠簸，决定从 Haskell 开始。
 
