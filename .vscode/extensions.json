@@ -1,0 +1,10 @@
+{
+  // prettier-ignore
+  "recommendations": [
+    "dbaeumer.vscode-eslint",                 // ESLint
+    "esbenp.prettier-vscode",                 // Prettier 
+    "streetsidesoftware.code-spell-checker",  // SpellChecker
+    
+    "bierner.markdown-preview-github-styles", // Render mathematical markup syntax with the same algorithm as GitHub
+  ]
+}
