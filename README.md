@@ -11,5 +11,3 @@ A knowledge base of theoretical practices, engineering applications and framewor
 
 - 函数式编程（`Functional Programming，FP`）
   - [函数式编程: 缘起](./ProgrammingParadigm/FP-Origins.md)
-- 函数式响应式编程（`Functional Reactive Programming，FRP`）
-  - [函数式响应式编程：探索之旅](./ProgrammingParadigm/FRP-ExplorationTrips.md)
