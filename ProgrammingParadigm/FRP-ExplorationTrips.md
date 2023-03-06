@@ -1,11 +1,4 @@
-<style>
-  img {
-    margin: auto;
-    display: block;
-  }
-</style>
-
-# Functional Programming: Exploration Trips
+# Functional Reactive Programming: Exploration Trips
 
 ## 统一语言
 
@@ -136,3 +129,5 @@ window.addEventListener = (type, handler) => {
 ## 函数式编程
 
 ## 函数式响应式编程
+
+## First Principle Thinking

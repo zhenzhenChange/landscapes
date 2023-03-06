@@ -5,7 +5,7 @@ A knowledge base of theoretical practices, engineering applications and framewor
 ## Books
 
 - 代码整洁之道（`Clean Code`）
-- 深入浅出 Haskell 编程（`Haskell Programming From First Principles`）
+- Haskell 编程的第一性原理（`Haskell Programming From First Principles`）
 
 ## Programming Paradigms
 
