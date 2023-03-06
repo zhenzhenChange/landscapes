@@ -4,5 +4,8 @@
 
 version: '0.2'
 
-words: []
+# prettier-ignore
+words:
+  - chronous                    # 时钟
+
 ignoreWords: []
