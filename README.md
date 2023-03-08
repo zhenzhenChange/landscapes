@@ -11,5 +11,6 @@ A knowledge base of theoretical practices, engineering applications and framewor
 
 - 探索之旅（`Exploration Tours`）
   - [探索之旅之第一性原理](./ExplorationTours/ExplorationTours-01.md)
+  - [探索之旅之状态管理](./ExplorationTours/ExplorationTours-02.md)
 - 函数式编程（`Functional Programming，FP`）
   - [函数式编程：缘起](./ProgrammingParadigm/FP-Origins.md)
