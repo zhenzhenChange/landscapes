@@ -9,12 +9,12 @@
 本次基准测试涉及的主流包管理器及其版本为：
 
 - `npm v9`
-- `Yarn v1 classic`
 - `Pnpm v8`
+- `Yarn v1 classic`
 
 其中，`Cnpm`由淘宝团队对`npm`进行了优化改造并提供了镜像源和缓存机制，而`Tnpm`则是在`Cnpm`的基础上进一步增强和定制，它们主要应用于企业私有化领域，所以并不算在主流范畴内。
 
-> [Tnpm Rapid](https://zhuanlan.zhihu.com/p/455809528)
+> 相关资料：[Tnpm Rapid](https://zhuanlan.zhihu.com/p/455809528)
 
 随着这几年的发展，`Yarn`已经衍生出两个不同的版本：`Yarn classic`用来表明`v1`的版本，而`Yarn berry`则用来表示`v2`及其以上的版本。
 
@@ -24,13 +24,13 @@
 
   ![yarn-downloads](images/yarn-downloads.png)
 
-- `Yarn berry`的设计与其它包管理器或是社区生态的发展方向有所不同（非贬义），尽管它也在努力兼容，但一些知名开源库考虑到兼容性问题还是会强制使用`Yarn classic`，比如 [Angular](https://github.com/angular/angular/blob/main/.yarn/README.md)。
-- `Yarn berry`与`Pnpm`在特性/功能上有许多相通之处，因此两者的发展方向正逐渐趋近。
-- `Yarn berry`的启用过程配置略微繁琐，不利于自动化测试的进行。
+- `Yarn berry`的架构设计与其它包管理器或是社区生态的发展方向有所不同（非贬义），尽管它也在努力兼容，但一些知名开源库考虑到兼容性问题还是会强制使用`Yarn classic`，比如 [Angular](https://github.com/angular/angular/blob/main/.yarn/README.md)。
+- `Yarn berry`与`Pnpm`在特性/功能上有许多相通之处，同时两者的发展方向也正逐渐趋近。
+- `Yarn berry`的启用过程配置略为繁琐，不利于进行通用的自动化测试。
 
 基于上述原因，我们只需要对`Pnpm`进行测试即可涵盖对`Yarn berry`的考虑。
 
-> 如果你想获取`Yarn berry`的基准测试结果，可以参考下文中`Yarn`与`Pnpm`的官方基准测试，或是对自动化测试项目的源代码进行修改以进行测试。
+> 如果你想了解`Yarn berry`的基准测试结果，可以参考下文中`Yarn`与`Pnpm`的官方基准测试，或是对自动化测试项目的源代码进行修改以进行测试。
 
 ## 基准测试结果
 
@@ -47,7 +47,7 @@
 
 > 鉴于篇幅限制，你可以在[附录](./infra-link-pm-benchmarks.md)中查看更详细的基准测试结果。
 
-### 包管理器侧重点对照表
+### 包管理器侧重点对比表
 
 根据基准测试结果得出的包管理器侧重点对比表：
 
