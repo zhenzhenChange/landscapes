@@ -20,7 +20,7 @@
 
 考虑到以下因素，我们仅测试`Yarn classic`版本：
 
-- `Yarn classic`至今为止仍作为默认版本被安装，对于一般开发者，`Yarn berry`的知晓率和使用率都相对较低。
+- `Yarn classic`至今为止仍作为[默认版本](https://www.npmjs.com/package/yarn?activeTab=versions)被安装，对于一般开发者，`Yarn berry`的知晓率和使用率都相对较低。
 
   ![yarn-downloads](images/yarn-downloads.png)
 
@@ -33,6 +33,8 @@
 > 如果你想获取`Yarn berry`的基准测试结果，可以参考下文中`Yarn`与`Pnpm`的官方基准测试，或是对自动化测试项目的源代码进行修改以进行测试。
 
 ## 基准测试结果
+
+### 基准测试参考与实现
 
 将`Yarn`与`Pnpm`的官方基准测试结果作为参考：
 
@@ -62,6 +64,14 @@
 - `Pnpm`则更强调充分利用`cache`以提高安装效率，减少磁盘的占用，同时解决依赖污染等问题
 
 ## 跨平台兼容性
+
+除了`Pnpm`之外，其它两个主流包管理器在跨平台兼容性方面表现出色。
+
+`Pnpm`在安装依赖时采用软硬链接方式将依赖项从全局存储库链接到项目中。而在`Windows`环境下，由于软链接存在一定的兼容性问题，`Pnpm`采用了其它[解决方案](https://pnpm.io/faq#does-it-work-on-windows)替代。
+
+因此，就`Windows`环境而言，使用`Pnpm`安装依赖的性能有可能不如`Yarn`，甚至更差（取决于机器的硬件性能）。
+
+> 在极端情况下，还可能会导致`Windows`操作系统卡死崩溃，目前还无法知晓问题的确切原因（`Pnpm`作者也不确定 🤣），感兴趣请追踪：<https://github.com/pnpm/pnpm/issues/6298>
 
 ## 项目管理策略
 
