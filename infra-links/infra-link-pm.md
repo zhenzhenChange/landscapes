@@ -30,17 +30,41 @@
 
 基于上述原因，我们只需要对`Pnpm`进行测试即可涵盖对`Yarn berry`的考虑。
 
+> 如果你想获取`Yarn berry`的基准测试结果，可以参考下文中`Yarn`与`Pnpm`的官方基准测试，或是对自动化测试项目的源代码进行修改以进行测试。
+
 ## 基准测试结果
 
 将`Yarn`与`Pnpm`的官方基准测试结果作为参考：
 
 - [https://pnpm.io/benchmarks](https://pnpm.io/benchmarks)
+  - [benchmark script](https://github.com/pnpm/pnpm.github.io/tree/main/benchmarks)
 - [https://yarnpkg.com/benchmarks](https://yarnpkg.com/benchmarks)
+  - [benchmark script](https://github.com/yarnpkg/berry/blob/master/scripts/bench-run.sh) - 该基准测试仅在`Linux`环境下进行
+
+自行实现的自动化测试项目参考了官方的测试脚本并经过优化，使其具备跨平台测试的能力，且更具有扩展性：[control-variates](https://github.com/zhenzhenChange/control-variates)。
+
+> 鉴于篇幅限制，你可以在[附录](./infra-link-pm-benchmarks.md)中查看更详细的基准测试结果。
+
+### 包管理器侧重点对照表
+
+根据基准测试结果得出的包管理器侧重点对比表：
+
+| installer | cache  | lockfile | node_modules |
+| :-------: | :----: | :------: | :----------: |
+|   `npm`   |        |          |    💥💥💥    |
+|  `Yarn`   |        |  💥💥💥  |              |
+|  `Pnpm`   | 💥💥💥 |          |              |
+
+其中：
+
+- `npm`主要关注`node_modules`的可用性，只要所需依赖能被正确安装即可
+- `Yarn`更注重维持`lockfile`的一致性，确保在不同环境或多次安装时能获得一致的依赖结构
+- `Pnpm`则更强调充分利用`cache`以提高安装效率，减少磁盘的占用，同时解决依赖污染等问题
 
 ## 跨平台兼容性
 
 ## 项目管理策略
 
-## 决策树
+## 决策树 & 收益表
 
 > 一切选择皆为权衡（Trade-off）。
