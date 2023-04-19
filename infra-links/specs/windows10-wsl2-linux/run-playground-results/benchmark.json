@@ -1,0 +1,155 @@
+[
+  {
+    "pm": "npm",
+    "version": "9.6.4",
+    "records": [
+      {
+        "time": 91835,
+        "size": 245336179,
+        "vars": "🤍 cache | 🤍 lockfile | 🤍 node_modules"
+      },
+      {
+        "time": 579,
+        "size": 245336179,
+        "vars": "🧡 cache | 🧡 lockfile | 🧡 node_modules"
+      },
+      {
+        "time": 5926,
+        "size": 245336179,
+        "vars": "🧡 cache | 🤍 lockfile | 🤍 node_modules"
+      },
+      {
+        "time": 55804,
+        "size": 245336179,
+        "vars": "🤍 cache | 🧡 lockfile | 🤍 node_modules"
+      },
+      {
+        "time": 2913,
+        "size": 245322171,
+        "vars": "🤍 cache | 🤍 lockfile | 🧡 node_modules"
+      },
+      {
+        "time": 55781,
+        "size": 245322171,
+        "vars": "🧡 cache | 🧡 lockfile | 🤍 node_modules"
+      },
+      {
+        "time": 497,
+        "size": 245322171,
+        "vars": "🧡 cache | 🤍 lockfile | 🧡 node_modules"
+      },
+      {
+        "time": 561,
+        "size": 245322171,
+        "vars": "🤍 cache | 🧡 lockfile | 🧡 node_modules"
+      },
+      {
+        "vars": "dynamic deps changed",
+        "time": 123123,
+        "size": 292134771
+      }
+    ]
+  },
+  {
+    "pm": "yarn",
+    "version": "1.22.19",
+    "records": [
+      {
+        "time": 249403,
+        "size": 245296949,
+        "vars": "🤍 cache | 🤍 lockfile | 🤍 node_modules"
+      },
+      {
+        "time": 261,
+        "size": 245296949,
+        "vars": "🧡 cache | 🧡 lockfile | 🧡 node_modules"
+      },
+      {
+        "time": 36171,
+        "size": 245296949,
+        "vars": "🧡 cache | 🤍 lockfile | 🤍 node_modules"
+      },
+      {
+        "time": 212766,
+        "size": 245296949,
+        "vars": "🤍 cache | 🧡 lockfile | 🤍 node_modules"
+      },
+      {
+        "time": 247672,
+        "size": 245296949,
+        "vars": "🤍 cache | 🤍 lockfile | 🧡 node_modules"
+      },
+      {
+        "time": 2670,
+        "size": 245296949,
+        "vars": "🧡 cache | 🧡 lockfile | 🤍 node_modules"
+      },
+      {
+        "time": 39504,
+        "size": 245296949,
+        "vars": "🧡 cache | 🤍 lockfile | 🧡 node_modules"
+      },
+      {
+        "time": 770,
+        "size": 245296949,
+        "vars": "🤍 cache | 🧡 lockfile | 🧡 node_modules"
+      },
+      {
+        "vars": "dynamic deps changed",
+        "time": 374034,
+        "size": 291891331
+      }
+    ]
+  },
+  {
+    "pm": "pnpm",
+    "version": "8.3.0",
+    "records": [
+      {
+        "time": 86532,
+        "size": 244831421,
+        "vars": "🤍 cache | 🤍 lockfile | 🤍 node_modules"
+      },
+      {
+        "time": 638,
+        "size": 244831427,
+        "vars": "🧡 cache | 🧡 lockfile | 🧡 node_modules"
+      },
+      {
+        "time": 17950,
+        "size": 244831421,
+        "vars": "🧡 cache | 🤍 lockfile | 🤍 node_modules"
+      },
+      {
+        "time": 57941,
+        "size": 244812231,
+        "vars": "🤍 cache | 🧡 lockfile | 🤍 node_modules"
+      },
+      {
+        "time": 60110,
+        "size": 244812237,
+        "vars": "🤍 cache | 🤍 lockfile | 🧡 node_modules"
+      },
+      {
+        "time": 1974,
+        "size": 244812231,
+        "vars": "🧡 cache | 🧡 lockfile | 🤍 node_modules"
+      },
+      {
+        "time": 1924,
+        "size": 244812237,
+        "vars": "🧡 cache | 🤍 lockfile | 🧡 node_modules"
+      },
+      {
+        "time": 756,
+        "size": 244812243,
+        "vars": "🤍 cache | 🧡 lockfile | 🧡 node_modules"
+      },
+      {
+        "vars": "dynamic deps changed",
+        "time": 117436,
+        "size": 348236968
+      }
+    ]
+  }
+]
