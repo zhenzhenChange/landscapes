@@ -204,21 +204,47 @@ pnpm -F @mono/bar add @mono/foo
    lerna add @mono/foo --scope=@mono/bar
    ```
 
+### 任务编排能力
+
+在一个 monorepo 仓库中，通常有许多子包，这些子包之间可能存在依赖关系。如何根据子包之间的依赖关系进行拓扑排序，并按照正确的顺序执行任务至关重要。
+
+例如，在前文中，`@mono/bar`依赖`@mono/foo`，则需要先执行`@mono/foo`的`build`任务。
+
+Pnpm 则支持了一定的任务编排能力。
+
+```shell
+# -r -> 所有包含 build 命令的 package 都会被执行
+pnpm -r build
+
+# -F -> 部分 package
+pnpm -F ..@mono/foo     # 执行依赖 @mono/foo 的包
+pnpm -F ..@mono/foo..   # 执行依赖 @mono/foo 和被 @mono/foo 依赖的包
+pnpm -F @mono/foo..     # 执行被 @mono/foo 依赖的包
+```
+
+![pnpm-sort](images/pnpm-sort.png)
+
+但貌似 Yarn 和 npm 并不支持拓扑排序。
+
+```shell
+yarn workspaces run build
+```
+
+![yarn-sort](images/yarn-sort.png)
+
+当然，随着 monorepo 项目的不断扩大和复杂化，可能需要更多的功能，如并行任务、构建缓存、智能任务调度等。在这种情况下，可能需要借助第三方工具，如使用 Lerna、Nx、Rush、TurboRepo 等来支持这些需求。这些工具提供了更高级的功能和更好的扩展性，能够更好地管理大型 monorepo 项目。
+
 ### 小结
 
-相比之下，`Pnpm`的使用体验更加出色。
+相比之下，`Pnpm`的使用体验更加出色，功能集成度更高，毕竟它也借鉴了很多前人的经验。
 
-|   pm   | workspace | linking |
-| :----: | :-------: | :-----: |
-| `npm`  |    🤩     |   🤩    |
-| `Yarn` |    🤩     |   🤩    |
-| `Pnpm` |  🤩🤩🤩   | 🤩🤩🤩  |
+|   pm   | Workspace | Linking | Topology |
+| :----: | :-------: | :-----: | :------: |
+| `npm`  |    🤩     |   🤩    |    ❌    |
+| `Yarn` |    🤩     |   🤩    |    ❌    |
+| `Pnpm` |  🤩🤩🤩   | 🤩🤩🤩  |    ✔     |
 
-### workspace 命令
-
-### 编排与发布
-
-> 语义化版本：[Semver](https://semver.org/)
+本节主要关注依赖管理方面的内容，而完整的 monorepo 模式通常还需要一个发布系统。不过由于发布系统不在包管理器所涵盖的范围内，因此本文不再深入。
 
 ![release-system](images/release-system.jpg)
 
