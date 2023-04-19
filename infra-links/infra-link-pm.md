@@ -106,7 +106,7 @@ Pnpm 在安装依赖时采用软硬链接方式将依赖项从全局存储库链
 
 我们已经在前文详细介绍了几个主流包管理器在依赖安装时的性能对比，因此接下来我们将着重比较它们在 monorepo 模式下其它方面的表现。
 
-### workspace 声明
+### 声明工作空间
 
 ```jsonc
 // npm - package.json
@@ -132,7 +132,87 @@ packages:
 
 这种分离方式不仅提升了未来添加自定义属性的灵活性，同时也能避免`package.json`文件功能的过度膨胀和不单一问题。
 
-### workspace 协议
+### 链接本地依赖
+
+#### [Pnpm workspace](https://pnpm.io/workspaces)
+
+```tree
+monorepo
+├─ packages
+│    ├─ mono-bar
+│    │    └─ package.json
+│    └─ mono-foo
+│           └─ package.json
+├─ package.json
+├─ pnpm-lock.yaml
+└─ pnpm-workspace.yaml
+```
+
+Pnpm 实现了一项名为`workspace protocol`（以下简称`workspace:`）的功能，该功能可以优先搜索本地已存在的`package`，以便在安装依赖时进行优化。
+
+具体来说，使用 Pnpm 为某个子包添加依赖时会触发以下逻辑：
+
+```shell
+pnpm -F @mono/bar add @mono/foo
+```
+
+1. 如果本地存在子包`@mono/foo`，则将其直接链接到子包`@mono/bar`中，并自动添加`workspace:`前缀标注（当然，你也可以手动声明之后执行依赖安装）：
+
+   ```json
+   {
+     "name": "@mono/bar",
+     "dependencies": {
+       "@mono/foo": "workspace:^"
+     }
+   }
+   ```
+
+2. 如果本地不存在依赖包`@mono/foo`，Pnpm 会从镜像站检索该包，如果检索成功，则会安装该依赖包，但这有可能不是你想要的（你需要的是本地的其它子包）。
+
+使用`workspace:`可以确保你只安装本地的依赖包，避免错误的发生，这样做可以帮助你提前发现问题。
+
+#### Yarn & npm
+
+而 Yarn 和 npm 需要做更多的工作。
+
+1. 手动声明依赖关系，在安装过程中检索并自动链接（与上文的逻辑 2 如出一辙）
+
+   ```json
+   {
+     "name": "@mono/bar",
+     "dependencies": {
+       "@mono/foo": "1.0.0"
+     }
+   }
+   ```
+
+2. 手动执行链接操作
+
+   ```shell
+   # 在 @mono/foo 执行链接命令（此命令会将该包链接至磁盘全局而不是项目的根目录）
+   yarn link
+   ```
+
+   ```shell
+   # 在 @mono/bar 执行链接命令（将 @mono/foo 从全局链接至此）
+   yarn link @mono/foo
+   ```
+
+3. 借助第三方工具，如 Lerna。
+
+   ```shell
+   lerna add @mono/foo --scope=@mono/bar
+   ```
+
+### 小结
+
+相比之下，`Pnpm`的使用体验更加出色。
+
+|   pm   | workspace | linking |
+| :----: | :-------: | :-----: |
+| `npm`  |    🤩     |   🤩    |
+| `Yarn` |    🤩     |   🤩    |
+| `Pnpm` |  🤩🤩🤩   | 🤩🤩🤩  |
 
 ### workspace 命令
 

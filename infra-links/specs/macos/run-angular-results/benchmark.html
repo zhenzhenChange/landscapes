@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>angular-https://registry.npmjs.org/-MacOS</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      #container {
+        width: calc(100vw - 64px);
+        height: calc(100vh - 64px);
+        padding: 32px;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
+  </head>
+  <body>
+    <div id="container"></div>
+
+    <script>
+      const msToSeconds = (milliseconds) => `${(milliseconds / 1000).toFixed(2)}s`
+
+      const documentTitle = 'angular-https://registry.npmjs.org/-MacOS'
+      const benchmarkYAxis = JSON.parse('["🤍 cache | 🤍 lockfile | 🤍 node_modules","🧡 cache | 🧡 lockfile | 🧡 node_modules","🧡 cache | 🤍 lockfile | 🤍 node_modules","🤍 cache | 🧡 lockfile | 🤍 node_modules","🤍 cache | 🤍 lockfile | 🧡 node_modules","🧡 cache | 🧡 lockfile | 🤍 node_modules","🧡 cache | 🤍 lockfile | 🧡 node_modules","🤍 cache | 🧡 lockfile | 🧡 node_modules","dynamic deps changed"]')
+      const benchmarkResults = JSON.parse('[{"pm":"npm","version":"9.6.4","records":[{"time":207597,"size":456978025,"vars":"🤍 cache | 🤍 lockfile | 🤍 node_modules"},{"time":1064,"size":456978025,"vars":"🧡 cache | 🧡 lockfile | 🧡 node_modules"},{"time":36797,"size":456978025,"vars":"🧡 cache | 🤍 lockfile | 🤍 node_modules"},{"time":34698,"size":456978025,"vars":"🤍 cache | 🧡 lockfile | 🤍 node_modules"},{"time":1350,"size":456968348,"vars":"🤍 cache | 🤍 lockfile | 🧡 node_modules"},{"time":36584,"size":456968348,"vars":"🧡 cache | 🧡 lockfile | 🤍 node_modules"},{"time":1322,"size":456968348,"vars":"🧡 cache | 🤍 lockfile | 🧡 node_modules"},{"time":876,"size":456968348,"vars":"🤍 cache | 🧡 lockfile | 🧡 node_modules"},{"vars":"dynamic deps changed","time":58169,"size":477252794}]},{"pm":"yarn","version":"1.22.19","records":[{"time":234264,"size":489635647,"vars":"🤍 cache | 🤍 lockfile | 🤍 node_modules"},{"time":286,"size":489635647,"vars":"🧡 cache | 🧡 lockfile | 🧡 node_modules"},{"time":116097,"size":489635647,"vars":"🧡 cache | 🤍 lockfile | 🤍 node_modules"},{"time":21526,"size":489635647,"vars":"🤍 cache | 🧡 lockfile | 🤍 node_modules"},{"time":122842,"size":489635647,"vars":"🤍 cache | 🤍 lockfile | 🧡 node_modules"},{"time":9175,"size":489635647,"vars":"🧡 cache | 🧡 lockfile | 🤍 node_modules"},{"time":107167,"size":489635647,"vars":"🧡 cache | 🤍 lockfile | 🧡 node_modules"},{"time":273,"size":489635647,"vars":"🤍 cache | 🧡 lockfile | 🧡 node_modules"},{"vars":"dynamic deps changed","time":159459,"size":478329902}]},{"pm":"pnpm","version":"8.3.0","records":[{"time":178248,"size":395983740,"vars":"🤍 cache | 🤍 lockfile | 🤍 node_modules"},{"time":619,"size":395983746,"vars":"🧡 cache | 🧡 lockfile | 🧡 node_modules"},{"time":43812,"size":395983740,"vars":"🧡 cache | 🤍 lockfile | 🤍 node_modules"},{"time":73169,"size":395868730,"vars":"🤍 cache | 🧡 lockfile | 🤍 node_modules"},{"time":75149,"size":395868736,"vars":"🤍 cache | 🤍 lockfile | 🧡 node_modules"},{"time":12071,"size":395868730,"vars":"🧡 cache | 🧡 lockfile | 🤍 node_modules"},{"time":1888,"size":395868736,"vars":"🧡 cache | 🤍 lockfile | 🧡 node_modules"},{"time":597,"size":395868742,"vars":"🤍 cache | 🧡 lockfile | 🧡 node_modules"},{"vars":"dynamic deps changed","time":131528,"size":504026317}]}]')
+
+      echarts.init(document.getElementById('container'), null, { renderer: 'svg' }).setOption({
+        grid: { left: '3%', right: '3%', bottom: '3%', containLabel: true },
+        title: { text: documentTitle },
+        legend: {},
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, valueFormatter: (value) => msToSeconds(value) },
+        xAxis: { type: 'value', boundaryGap: [0, 0.01] },
+        yAxis: { type: 'category', data: benchmarkYAxis },
+        series: benchmarkResults.map((result) => ({
+          type: 'bar',
+          name: `${result.pm} v${result.version}`,
+          data: result.records.map((record) => record.time),
+          label: {
+            show: true,
+            position: 'right',
+            formatter: ({ value }) => msToSeconds(value),
+          },
+        })),
+      })
+    </script>
+  </body>
+</html>
