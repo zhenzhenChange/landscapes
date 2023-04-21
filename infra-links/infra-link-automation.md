@@ -20,11 +20,11 @@
 
 ## 缓存策略
 
-缓存机制是提高构建效率的重要手段之一，我们可以对特定的文件夹进行缓存，例如`build_cache`和`node_modules`，其中`build_cache`文件夹的具体路径和名称可能因项目所使用的构建工具而异。
+缓存机制是提高构建效率的重要手段之一，我们可以对特定的文件进行缓存，例如`build_cache`和`node_modules`，其中`build_cache`文件夹的具体路径和名称可能因项目所使用的构建工具而异。
 
-通过缓存这些文件夹，可以避免每次都重新构建和安装依赖，从而节省大量时间。
+通过缓存这些文件，可以避免每次都重新开始安装依赖和构建，从而节省大量时间。
 
-> 由于`cache`包含了`build_cache`和`node_modules`，以下我们统称缓存。
+> 我们将项目中的`build_cache`或`node_modules`统称为工件（`Artifacts`），对工件做缓存。
 
 ### 具体措施
 
@@ -48,14 +48,111 @@ cache:
 
 ![ci-2](images/ci-2.jpg)
 
-### 另寻他路
+### 缓存策略的不足之处
 
-此策略在普通项目中会是一个简单的方案，但在一些特殊的项目中并非完美：
+尽管应用缓存策略可以在大多数项目中提高构建效率，但在一些特殊的项目中，它可能并非绝佳方案或需要额外的配置才能发挥作用。
 
-1. monorepo
-2. 大型 SSG 静态资源
-3. 来回的重复删除解压缩
-4. 阶段无用
+#### monorepo
+
+在 monorepo 项目中，每个子包都可能有自己的工件，如果只缓存项目根目录下的工件，由于缓存的缺失，包管理器或构建工具在进行工作时可能会重新开始而不是增量。
+
+因此除了项目根目录下的工件需要缓存之外，子包内的工件也需要一起缓存。
+
+```diff
+cache:
+  paths:
+    - build_cache
+    - node_modules
++   - packages/*/build_cache
++   - packages/*/node_modules
+```
+
+#### 性能浪费
+
+如前文所说，每个 Job 在执行之前都会执行清理工作。
+
+而在一些复杂的流程中，我们可能会将整个自动化流水线划分为多个阶段，每个阶段又会划分为多个 Job。这意味着缓存会频繁进行恢复与备份，虽然所需时间可能不多，但依然可能会对性能造成影响。
+
+例如，在<部署>阶段，我们只需要上传构建后的产物，这些产物可通过配置`artifacts`属性作为临时缓存保留，以便在阶段之间传递。但除此之外，不可能会再用到缓存内的工件，因此执行备份与恢复缓存操作是对性能的一种浪费。
+
+```yaml
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - yarn build
+  artifacts:
+    paths:
+      - dist
+    expire_in: 6 hrs
+
+deploy:
+  stage: deploy
+  script:
+    - scp xxx xxx dist
+```
+
+最简单的解决方案便是在部署阶段禁用缓存功能。
+
+```diff
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  script:
+    - yarn build
+  artifacts:
+    paths:
+      - dist
+    expire_in: 6 hrs
+
+deploy:
++ cache: []
+  stage: deploy
+  script:
+    - scp xxx xxx dist
+```
+
+#### 默认行为
+
+为确保 CI 环境中生成`build_cache`，请根据相应文档进行手动配置，因为部分框架的默认设置可能会禁用该功能。
+
+例如，在 Angular 项目便默认不会在 CI 环境中生成编译缓存：
+
+![angular-cache](images/angular-cache.png)
+
+需要手动开启：
+
+```json
+// angular.json
+
+{
+  "cli": {
+    "cache": {
+      "environment": "all"
+    }
+  }
+}
+```
+
+#### 静态资源项目
+
+静态资源项目通常用于门户网站和企业官网等需要频繁更新内容但不需要复杂交互功能的网站。它通过使用静态站点生成器（SSG）获取业务数据并编译为静态的 HTML 文件，以提高网站的响应速度和用户访问体验。
+
+随着时间的推移，静态资源会越来越多，这种项目也会变得越来越庞大。为了提高项目的构建速度，通常会对编译结果进行缓存，以进行增量构建。
+
+一个大型的静态资源网站可能包含数千个页面，总体积达到几 GB 甚至十几 GB，而其编译缓存的体积也是相当巨大的。
+
+譬如，我们公司某个业务线的官网项目（monorepo），使用`Gatsby`构建，其编译缓存（`.cache`）与公共资源（`public`）加起来达到了 3.5GB 的地步，这还只是该项目中某个子包。
+
+![cache-size](images/cache-size.png)
+
+而在 CI 环境中，如若对这种体积庞大的`build_cache`进行缓存备份与恢复，这个过程无疑会占据整个构建流程一定的时间比例。
 
 ## 我命由我不由天
 

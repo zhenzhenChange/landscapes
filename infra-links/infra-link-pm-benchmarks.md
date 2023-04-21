@@ -44,9 +44,10 @@
 
 ## 参数设定
 
-- `ignore-scripts` 忽略脚本的执行
-- `auto-peer-deps` 自动安装对等依赖
-- `child-concurrency = 5` 限制构建`node_modules`的进程数
+- `registry = https://registry.npmjs.org/` 限制官方镜像源
+- `ignore-scripts = true` 忽略脚本的执行
+- `auto-peer-deps  = true` 自动安装对等依赖
+- `child-concurrency = 5` 限制并发构建`node_modules`的进程数
 - `network-concurrency = 16` 限制下载依赖包时的并发请求数
 
 ## 机器环境
