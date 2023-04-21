@@ -128,14 +128,14 @@ deploy:
 
 需要手动开启：
 
-```json
+```diff
 // angular.json
 
 {
   "cli": {
-    "cache": {
-      "environment": "all"
-    }
++   "cache": {
++     "environment": "all"
++   }
   }
 }
 ```
@@ -150,12 +150,142 @@ deploy:
 
 譬如，我们公司某个业务线的官网项目（monorepo），使用`Gatsby`构建，其编译缓存（`.cache`）与公共资源（`public`）加起来达到了 3.5GB 的地步，这还只是该项目中某个子包。
 
+```shell
+# 统计命令
+du -h --max-depth=1
+```
+
 ![cache-size](images/cache-size.png)
 
 而在 CI 环境中，如若对这种体积庞大的`build_cache`进行缓存备份与恢复，这个过程无疑会占据整个构建流程一定的时间比例。
 
 ## 我命由我不由天
 
-## 总结
+经过以上分析，使用缓存策略可以在一定程度上缓解问题，但又引入了其它问题。因为在实际项目中，因素复杂多变，不同的项目使用缓存策略可能还需要考虑其它方面，非常考验维护人员的心智负担。
 
-为了确保缓存的有效性和正确性，需要注意定期清理和更新缓存，以及避免缓存文件夹中包含与构建结果无关的文件。
+思考一下，我们采用缓存策略的主要动机是应对`git clean -fdx`命令的影响。
+
+通过查阅文档发现，GitLab 提供了一个覆盖这条命令的参数的[选项](https://docs.gitlab.com/ee/ci/runners/configure_runners.html#git-clean-flags)：
+
+```diff
+variables:
++ GIT_CLEAN_FLAGS: -fdx -e dir1 -e dir2
+```
+
+通过`GIT_CLEAN_FLAGS`标记传递新的参数。其中，`-e`表示`exclude`，采用模式匹配规则，用于排除在`-x`参数中命中`.gitignore`标记的文件夹，多个文件夹则用多个`-e`指定。
+
+如此一来，整个构建流程将与一开始时一样，只不过在执行清理操作时，排除特定的文件夹，并且这一覆写，对每一个阶段每一个 Job 都适用：
+
+![ci-3](images/ci-3.jpg)
+
+### 手动清理
+
+在 CI 中，我们可以手动运行流水线，传递`GIT_CLEAN_FLAGS`变量的值为`-fdx`，用于告知 CI 服务器清空所有与源代码无关的文件。
+
+**此操作可用于在发现编译缓存无效或出现副作用时采取的措施，以避免构建出错误的代码。**
+
+![run](images/run.png)
+
+## 主要配置示例
+
+### 缓存策略
+
+```yaml
+# .gitlab-ci.yml
+
+image: node:16
+
+cache:
+  paths:
+    # 一般项目只需
+    - build_cache
+    - node_modules
+
+    # monorepo 项目还需
+    - packages/*/build_cache
+    - packages/*/node_modules
+
+stages:
+  - install
+  - build
+  - deploy
+
+install_deps:
+  stage: install
+  script:
+    - yarn install
+
+build_production:
+  stage: build
+  script:
+    - yarn build
+  artifacts:
+    paths:
+      - production
+    expire_in: 6 hrs
+
+deploy_server:
+  # 部署阶段禁用缓存
+  cache: []
+  stage: deploy
+  script:
+    - scp xxx xxx production
+```
+
+### 覆写参数
+
+```yaml
+# .gitlab-ci.yml
+
+image: node:16
+
+stages:
+  - install
+  - build
+  - deploy
+
+variables:
+  # 以一个 Gatsby + monorepo 项目为例，由于 -e 是模式匹配，因此子包下的文件夹也能命中
+  GIT_CLEAN_FLAGS: -fdx -e .cache -e public -e node_modules
+
+install_dep:
+  stage: install
+  script:
+    - yarn install
+
+build_main:
+  stage: build
+  script:
+    - cd packages/main
+    - yarn build
+  artifacts:
+    paths:
+      - main_dist
+    expire_in: 6 hrs
+
+# 由于未使用缓存也就无需禁用
+deploy_server:
+  stage: deploy
+  script:
+    - scp xxx xxx main_dist
+```
+
+两种方案可根据实际情况进行抉择。
+
+## 优化示例
+
+优化策略选择的是覆写参数。
+
+鉴于依赖未发生变更，在执行依赖安装阶段所需的时间非常短，仅需几秒钟，因此该步骤便不予展示。
+
+### 一个 Angular 项目
+
+构建效率提高了`68.6%`。
+
+![angular](images/angular.png)
+
+### 一个官网项目的某个子包
+
+构建效率提高了`46.5%`。
+
+![gatsby](images/gatsby.png)
