@@ -257,6 +257,8 @@ build_main:
   stage: build
   script:
     - cd packages/main
+    # 注意在构建之前不要再执行 yarn clean 清空 Gatsby 的编译缓存
+    # 我们需要利用编译缓存加速构建
     - yarn build
   artifacts:
     paths:
