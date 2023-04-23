@@ -44,7 +44,7 @@
 
 ## 参数设定
 
-- `registry = https://registry.npmjs.org/` 限制官方镜像源
+- `registry = https://registry.npmmirror.com/` 统一为国内镜像源
 - `ignore-scripts = true` 忽略脚本的执行
 - `auto-peer-deps  = true` 自动安装对等依赖
 - `child-concurrency = 5` 限制并发构建`node_modules`的进程数
